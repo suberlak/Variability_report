@@ -107,10 +107,11 @@ In frequency domain, we assess what is the weakest signal detectable by methods 
 
 
 %
-% VALIDATION OF ASTRO ML  CODE 
+% CHI2 TEST 
 %
 
 \subsection{ $\chi^{2}$ test : can we distinguish variability from noise?}
+\label{sec:chi2test}
 
 What is the minimum variability amplitude that we can measure? How can we distinguish pure noise from a genuine intrinsic variability? In this section we derive the variance of a $\chi^{2}_{DOF}$ distribution, to which we often compare the observed data to test whether it is consistent with Gaussian noise. We  find that for $N$ data points, the standard deviation of $\chi^{2}_{DOF}$ is $\sqrt{2/N}$ (eq.~\ref{eq:chi2_stdev}).  We then show that for a time-series with zero mean, and homoscedastic errors $e_{i} = \sigma$, we can express its variance in terms of a $\chi^{2}_{DOF}$  distribution (eq.~\ref{eq:chi2_variance}).  We use this result in a concrete case of a harmonic function, for which variance is known analytically (eq.~\ref{eq:variance_sinusoid}), and requiring a $3 \sigma$ detection,  we compare eqs.~\ref{eq:chi2_variance} and ~\ref{eq:detectable_chi2} to find the smallest detectable amplitude using the $\chi^{2}_{DOF}$ method.  This becomes an introduction to the method of  more advanced Bayesian parameter estimation  (see chapter 5.6.1 in Ivezic+2014). Calculating a full posterior pdf we describe the distribution of underlying variability by $\sigma_{0}$  (Fig.~\ref{fig:time_series_test}) .  It turns out that we can characterize the quality of detection by calculating  the signal-to-noise ratio for the posterior pdf (Fig.~\ref{fig:chi2_and_SN}) .  This method is able to robustly detect much smaller amplitudes than traditional $\chi^{2}_{DOF}$  (Fig.~\ref{fig:chi_sn_scatter})
 
@@ -256,10 +257,13 @@ We illustrate these calculations with the following example. We simulate $y = A 
 \label{fig:time_series_chi2}
 \end{figure}
 
+%
+%  WHAT WE HAVE SO FAR 
+%
 
 \subsection{What we have so far : how good $\chi^{2}$ can be ? }
 
-In assessing the usefulness of  considering $\chi^{2}$  - like quantities, we found in Sec.~\ref{}  that in order to achieve a $3 \sigma$ detection for a zero-mean harmonic time series  parametrized by $y = A \sin(t) + \epsilon $,  we need $A_{min} = \frac{2.9 \sigma}{N^{1/4}}$ (Eq.~\ref{eq:min_amplitude}).  On Fig.~\ref{} we compare that approach to the fully Bayesian calculation of Sec.~\ref{}, where a quality of detection is described by a signal-to-noise ratio (SN). 
+In assessing the usefulness of  considering $\chi^{2}$  - like quantities, we found in Sec.~\ref{sec:chi2test}  that in order to achieve a $3 \sigma$ detection for a zero-mean harmonic time series  parametrized by $y = A \sin(t) + \epsilon $,  we need $A_{min} = \frac{2.9 \sigma}{N^{1/4}}$ (Eq.~\ref{eq:min_amplitude}).  On Fig.~\ref{fig:chi2_and_SN} we compare that approach to the fully Bayesian calculation of Sec.~\ref{sec:beyondChi2}, where a quality of detection is described by a signal-to-noise ratio (SN). 
 
 Now if we want to distinguish time series from noise, we may use two other approaches coming from information theory, that quantify the difference in information content between the two models; in our case : noise model , and the time series model.  The two most common definitions of information content used are  Bayesian Information Criterion  (BIC), and Akaike Information Criterion (AIC):
 
@@ -308,10 +312,12 @@ A comparison between these three complementary ways of assessing the minimum det
  \label{fig:chi_BIC_AIC}
 \end{figure}
 
-
+%
+%  BAYESIAN APPROACH : BEYOND CHI2 
+%
 
 \subsection{Beyond $\chi^{2}$ : intrinsic variability with Bayesian approach}
-
+\label{sec:beyondChi2}
 As described in  detail in Chapter 5 of Ivezic+2014, it is possible to estimate parameters for  an underlying Gaussian Distribution given the observed data $\{x_{i}\}$. In summary, there are few ways to think about what kind of distribution $\{x_{i}\}$, together with associated errors, may come from. 
 
 First, $\{x_{i}\}$ could be measurements of a constant quantity, eg. length of a ruler, and the sought mean $\mu$ would correspond to our best estimate of the ruler length. If errors are known and heteroscedastic, then we also measure  them individually : $\sigma_{i}$ is a measured quantity, and the likelihood for obtaining data $\{x_{i}\}$ given $\mu$  and $\sigma_{i}$ is :
