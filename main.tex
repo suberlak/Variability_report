@@ -1,0 +1,673 @@
+% mnras_template.tex
+%
+% LaTeX template for creating an MNRAS paper
+%
+% v3.0 released 14 May 2015
+% (version numbers match those of mnras.cls)
+%
+% Copyright (C) Royal Astronomical Society 2015
+% Authors:
+% Keith T. Smith (Royal Astronomical Society)
+
+% Change log
+%
+% v3.0 May 2015
+%    Renamed to match the new package name
+%    Version number matches mnras.cls
+%    A few minor tweaks to wording
+% v1.0 September 2013
+%    Beta testing only - never publicly released
+%    First version: a simple (ish) template for creating an MNRAS paper
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Basic setup. Most papers should leave these options alone.
+\documentclass[fleqn,usenatbib]{mnras}  % a4paper,
+
+% MNRAS is set in Times font. If you don't have this installed (most LaTeX
+% installations will be fine) or prefer the old Computer Modern fonts, comment
+% out the following line
+\usepackage{newtxtext,newtxmath}
+%\usepackage{txfonts}
+% Depending on your LaTeX fonts installation, you might get better results with one of these:
+%\usepackage{mathptmx}
+%\usepackage{txfonts}
+
+
+% Use vector fonts, so it zooms properly in on-screen viewing software
+% Don't change these lines unless you know what you are doing
+\usepackage[T1]{fontenc}
+\usepackage{ae,aecompl}
+%\usepackage{slashbox}
+
+%%%%% AUTHORS - PLACE YOUR OWN PACKAGES HERE %%%%%
+
+% Only include extra packages if you really need them. Common packages are:
+\usepackage{graphicx}	% Including figure files
+\usepackage{amsmath}	% Advanced maths commands
+\usepackage{amssymb}	% Extra maths symbols
+\usepackage{diagbox}
+\usepackage{enumitem}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%% AUTHORS - PLACE YOUR OWN COMMANDS HERE %%%%%
+
+% Please keep new commands to a minimum, and use \newcommand not \def to avoid
+% overwriting existing commands. Example:
+%\newcommand{\pcm}{\,cm$^{-2}$}	% per cm-squared
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%% TITLE PAGE %%%%%%%%%%%%%%%%%%%
+
+% Title of the paper, and the short title which is used in the headers.
+% Keep the title short and informative.
+\title[Variability detection]{Methods for detecting variability in noisy data}
+
+% The list of authors, and the short list which is used in the headers.
+% If you need two or more lines of authors, add an extra line using \newauthor
+\author[K. Suberlak et al.]{
+Krzysztof Suberlak,$^{1}$\thanks{E-mail: suberlak@uw.edu}
+\v{Z}eljko Ivezi\'c, $^{1}$
+\\
+% List of institutions
+$^{1}$Department of Astronomy, University of Washington, Seattle, WA, United States\\
+}
+
+% These dates will be filled out by the publisher
+\date{Accepted XXX. Received YYY; in original form ZZZ}
+
+% Enter the current year, for the copyright statements etc.
+\pubyear{2017}
+
+% Don't change these lines
+\begin{document}
+\label{firstpage}
+\pagerange{\pageref{firstpage}--\pageref{lastpage}}
+\maketitle
+
+% Abstract of the paper
+\begin{abstract}
+
+We compare various methods used to detect variability in time and frequency domain. In time domain, we consider the how well can a  $\chi^{2}$ test distinguish noise from signal (AstroML 10.1.1). Then we test the maximum-likelihood method of parameter estimation for a Gaussian Distribution (AstroML 5.6.1). Defining a signal to noise ratio of variability detection in a given time series improves the quality of our prediction.  
+In frequency domain, we assess what is the weakest signal detectable by methods related to calculating power over frequency grid (periodogram, power spectral distribution). We consider what influences the accuracy of variability detection in frequency domain - how well can we tackle irregularly sampled time series with  heteroscedastic, uncorrelated errors, or what frequency grid to choose.  
+
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%% BODY OF PAPER %%%%%%%%%%%%%%%%%%
+
+\section{Introduction} 
+
+\section{Motivation}
+
+\section{Time Domain Methods}
+
+
+
+%
+% VALIDATION OF ASTRO ML  CODE 
+%
+
+\subsection{ $\chi^{2}$ test : can we distinguish variability from noise?}
+
+What is the minimum variability amplitude that we can measure? How can we distinguish pure noise from a genuine intrinsic variability? In this section we derive the variance of a $\chi^{2}_{DOF}$ distribution, to which we often compare the observed data to test whether it is consistent with Gaussian noise. We  find that for $N$ data points, the standard deviation of $\chi^{2}_{DOF}$ is $\sqrt{2/N}$ (eq.~\ref{eq:chi2_stdev}).  We then show that for a time-series with zero mean, and homoscedastic errors $e_{i} = \sigma$, we can express its variance in terms of a $\chi^{2}_{DOF}$  distribution (eq.~\ref{eq:chi2_variance}).  We use this result in a concrete case of a harmonic function, for which variance is known analytically (eq.~\ref{eq:variance_sinusoid}), and requiring a $3 \sigma$ detection,  we compare eqs.~\ref{eq:chi2_variance} and ~\ref{eq:detectable_chi2} to find the smallest detectable amplitude using the $\chi^{2}_{DOF}$ method.  This becomes an introduction to the method of  more advanced Bayesian parameter estimation  (see chapter 5.6.1 in Ivezic+2014). Calculating a full posterior pdf we describe the distribution of underlying variability by $\sigma_{0}$  (Fig.~\ref{fig:time_series_test}) .  It turns out that we can characterize the quality of detection by calculating  the signal-to-noise ratio for the posterior pdf (Fig.~\ref{fig:chi2_and_SN}) .  This method is able to robustly detect much smaller amplitudes than traditional $\chi^{2}_{DOF}$  (Fig.~\ref{fig:chi_sn_scatter})
+
+A simplest way is to compare our time series to a $\chi^{2}$  distribution. If observed points $\{x_{i}\}$ are drawn from a Gaussian distribution  $\mathcal{N}(\mu,\sigma)$, then with  $z_{i} = x_{i} - \mu / \sigma$ the quantity $Q = \sum_{i=1}^{N}{z_{i}^{2}}$, follows a  $\chi^{2}$ distribution with $N$ degrees of freedom (eq. 3.58 AstroML)  [text too much from there : change ! ]
+Often one defines a $\chi^{2}$ per degree of freedom : $\chi^{2}_{DOF} = \chi^{2}(Q/N)$. The mean value of $\chi^{2}_{DOF}$ is $1$.  For a continuous smoothly varying probability function that describes the parent distribution, the mean is the first raw moment:
+
+
+\begin{equation}
+\mu = \int_{-\infty}^{\infty}{x p(x) dx}
+\end{equation} 
+and the variance is the second raw moment:
+\begin{equation}
+Var = \sigma^{2} =  \int_{-\infty}^{\infty}{(x-\mu)^{2} p(x) dx} =  \int_{-\infty}^{\infty}{x^{2} p(x) dx} - \mu^{2}
+\end{equation}
+
+We denote by $\langle x \rangle$ the expectation value of $x$. Thus the above can be written as : $Var= \sigma^{2} = \langle x^{2} \rangle - \langle x \rangle ^{2}$. 
+
+
+The standard deviation of  $\chi^{2}_{DOF} = \sqrt{2/N}$. We can prove by first considering the  variance of $\chi^{2}_{DOF}$: 
+
+\begin{equation}
+Var(\chi^{2}_{DOF}) = Var\left(\frac{1}{N} \sum \frac{x_{i}^{2}}{\sigma^{2}} \right) = Var\left(\frac{v}{N \sigma^{2}}\right)
+\end{equation}
+
+Now $Var(\alpha x) = \alpha^{2} Var(x)$. Thus 
+
+\begin{equation} 
+Var\left(\frac{v}{N \sigma^{2}}\right) = \frac{Var(v)}{N^{2} \sigma^{4}} 
+\end{equation}
+
+$Var(v) = \langle v^{2} \rangle - \langle v \rangle ^{2}$. We find first the second component:  the mean $\langle v \rangle = \langle \sum x_{i}^{2} \rangle = \sum \langle x_{i}^{2} \rangle $ (no cross terms). And since $Var(x_{i}) = \langle x_{i}^{2} \rangle= \sigma^{2}$, $\langle v \rangle = \sum \sigma^{2} = N \sigma^{2}$, so that $\langle v \rangle ^{2} = N^{2} \sigma^{4}$. 
+
+The first component is less straightforward: 
+
+\begin{equation}
+\langle v^{2} \rangle  = \langle (\sum x_{i}^{2} ) ^{2} \rangle  =  \langle \sum x_{i}^{2}  \sum x_{j}^{2}   \rangle = \sum \sum \langle x_{i}^{2} x_{j}^{2} \rangle
+\end{equation}
+
+The expectation value of $x_{i}^{2} x_{j}^{2}$ involves $N$ center terms and $N^{2}-N$ cross terms : 
+
+$(x_{1}^{2} + x_{2}^{2} +x_{3}^{2} +...)(x_{1}^{2} + x_{2}^{2} +x_{3}^{2} +...)= x_{1}^{4} + x_{2}^{4}+...+x_{1}^{2}x_{2}^{2} + x_{1}^{2}x_{3}^{2}...$
+
+Thus $\langle x_{i}^{2} x_{j}^{2} \rangle = (N^{2}-N) \int x^{2} P(x) dx \int x^{2} P(x) dx  + N \int x^{4} P(x) dx  $. 
+
+Since $A=0$, $P(x)$ is a Gaussian. 
+
+We evaluate 
+\begin{equation}
+\int_{-\infty}^{\infty} \frac{x^{2}}{\sqrt{2\pi \sigma^{2}}} e^{-x^{2} / 2 \sigma^{2}} dx 
+\end{equation}
+
+substituting $u = x / \sqrt{2} \sigma$ and use the standard result  $\int u^{2} \exp(-\alpha u^{2})du = \sqrt(\pi)/2\alpha^{3/2}$ , so that :   $\int x^{2} P(x) dx = \sigma^{2}$. 
+
+similarly, for 
+
+\begin{equation}
+\int_{-\infty}^{\infty} \frac{x^{4}}{\sqrt{2\pi \sigma^{2}}} e^{-x^{2} / 2 \sigma^{2}} dx 
+\end{equation}
+
+with identical substitution and the standard result  $\int u^{4} \exp(-\alpha u^{2})du =3 \sqrt(\pi)/4\alpha^{5/2}$ we obtain : $\int x^{4} P(x) dx = 3 \sigma^{4}$.  
+
+Therefore:
+\begin{equation}
+\langle v^{2} \rangle = (N^{2}-N) \sigma^{4} + N 3\sigma^{4} = N^{2}\sigma^{4} + 2N\sigma^{4}
+\end{equation}
+
+Finally, 
+\begin{equation}
+\label{eq:chi2_variance}
+Var\left(\frac{v}{N \sigma^{2}}\right) = \frac{Var(v)}{N^{2} \sigma^{4}}  = \frac{1}{N^{2}\sigma^{4}}(N^{2}\sigma^{4} + 2N\sigma^{4}-N^{2}\sigma^{4}) = \frac{2}{N}
+\end{equation}
+
+Thus the standard deviation of $\chi^{2}_{DOF}$ , being the square root of variance by definition, is equal to $\sqrt{2/N}$. 
+
+\begin{equation}
+\label{eq:chi2_stdev}
+\sigma\left( \chi^{2}_{DOF} \right) = \sqrt{2/N}
+\end{equation}
+
+Therefore, if the observed points ${x_{i}}$ originate from a Gaussian distribution, then we would expect  $\chi^{2}_{DOF}$  to be centered around 1,  with a standard deviation  $\sqrt{2/N}$. This means that the plot of $\chi^{2}_{DOF}$ will get narrower as we sample more points from the original series.  For $N \to \infty$,  $\chi^{2}_{DOF} \to \delta(1)$.    
+
+Now there is another general result worth mentioning. Namely, for a time series with mean $\langle x \rangle = 0$  (such as $x_{i}$), $z_{i} = x_{i} - \mu / \sigma = x_{i} / \sigma$, so that   $\chi^{2}_{DOF} = \sum_{i=1}^{N}{(1/N) z_{i}^{2}} = \sum_{i=1}^{N} = \langle x_{i} ^{2} \rangle / \sigma^{2}$. Now since $Var(x) = \langle x^{2} \rangle - \langle x \rangle ^{2}$, this means that for a $0$ mean time series, 
+\begin{equation}
+\label{eq:chi2_and_variance}
+\chi^{2}_{DOF} = Var / \sigma^{2}
+\end{equation}
+
+Therefore we can express the variance of a concrete time series in terms of $\chi^{2}_{DOF}$. 
+
+Consider a harmonic time series. For $y(t) = A(\sin(\omega t)$, with Gaussian errors $\epsilon \sim \mathcal{N}(0,\sigma)$, sampled by     $N=100$ points, $x_{i} = y_{i} + \epsilon_{i}$, the variance is $Var(x) = Var(y+\epsilon) = Var(y) + Var(\epsilon) = Var(A \sin(x)) + \sigma^{2}$. Now from the definition, $Var(A\sin(x)) = \langle A^{2} \sin^{2}(x) \rangle - \langle A \sin(x) \rangle ^{2} = A^{2} / 2 $, because $\langle \sin^{2}(x) \rangle = 1/2$ and $\langle sin(x)\rangle = 0$ due to symmetry. Thus for a sinusoidal time series,  
+
+\begin{equation}
+\label{eq:variance_sinusoid}
+Var(x) = A^{2}/2  + \sigma^{2} 
+\end{equation}
+
+Given that variance of time series, we can usefully link the $\chi^{2}_{DOF}$ to the amplitude of time series by the above result. We can ask what is the amplitude for which  $\chi^{2}_{DOF}$ would have over three sigma departure from $1$. How significant is such departure?  The probability that $\chi^{2}_{DOF}$ departs by more than $3$ standard deviations from the mean is $0.001$.  
+
+Carrying on the calculation, if we require at least $\chi^{2}_{DOF} = 1 + 3 \sigma(\chi^{2}_{DOF})$, i.e. 
+
+\begin{equation} 
+\label{eq:detectable_chi2}
+\chi^{2}_{DOF} = 1 + 3 \sqrt{2/N}
+\end{equation}
+
+and using $\chi^{2}_{DOF}  = Var(x) / \sigma^{2}$ (eq.\ref{eq:chi2_variance}), we have $Var(x) / \sigma^{2} = 1 + 3 \sqrt{2/N}$. Since for the sinusoidal time series, $Var(x) = A^{2}/2  + \sigma^{2}$ (eq.~\ref{eq:variance_sinusoid}), we have: 
+
+\begin{equation}
+\label{eq:condition_to_detect}
+\frac{A^{2}/2  + \sigma^{2}}{\sigma^{2}} >  1 + 3 \sqrt{2/N}
+\end{equation}
+
+thus  $A^{2} > 6 \sqrt{2} \sigma^{2} / \sqrt{N}$, so that $A > 2.9 \sigma / N^{1/4}$. Therefore, the minimum detectable amplitude at the $3 \sigma$ level is 
+
+\begin{equation}
+\label{eq:min_amplitude}
+A_{min} = \frac{2.9 \sigma}{N^{1/4}}
+\end{equation}
+
+
+
+
+%If our time series has homoscedastic Gaussian errors with standard deviation $\sigma$, a standard method to assess variability is to calculate  the $\chi^{2}_{DOF}$.  If such time series is consistent with Gaussian noise ($\mathcal{N}(0,\sigma)$), then  $\chi^{2}_{DOF}$ will be centered around $1$, with the standard deviation of $\sqrt{2/N}$. 
+
+
+%We call the theoretical variance of the parent distribution a variance over time series. Variance over realizations of the time series (samples) with errors is an estimator of the parent variance. 
+
+We illustrate these calculations with the following example. We simulate $y = A \sin(t) + \epsilon$, and show that $Var(x)$ is indeed $A^{2}/2  + \sigma^{2}$ (Fig.~\ref{fig:time_series_variance})  We also show that the $\chi^{2}_{DOF}$ of that time series is $\propto \sqrt{2/N}$ (Fig.~\ref{fig:time_series_chi2}).   
+
+
+\begin{figure}
+ \includegraphics[width=\columnwidth]{figs/Oct_2016_AstroML_variance}
+ \caption{We simulated the $y = A \sin(t) + \epsilon $, $\epsilon \sim \mathcal{N}(0, \sigma)$ time series drawing  N samples at equal time intervals.  For all realizations,  $A=0.1$, and $\sigma = 0.1 A$. For each N, we perform 1000 realizations of the time series, for which we calculate the variance. The  vertical orange dashed line is the theoretical approximation of $Var(y)$ by $V_{theory} = A^{2}/2  + \sigma^{2}$. We see that the higher the number of points (samplings from the parent distribution), the smaller spread around the theoretical value, i.e. the better the approximation.  Note that the histogram is centered on $V_{theory}$, spanning only $9\%$ of $V_{theory}$ in each direction along x-axis. }
+ \label{fig:time_series_variance}
+\end{figure}
+
+
+
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/Oct_2016_AstroML_stdev_chi2DOF}
+\caption{The standard deviation of values of $\chi^{2}_{DOF}$ for time series $y = A \sin(t) + \epsilon $, $\epsilon \sim \mathcal{N}(0, \sigma)$. We verify that the standard deviation for the $\chi^{2}_{DOF}$ of many realizations of time series is proportional to the $\sqrt{2/N}$, where $N$ is the size of the sample.  We explore N over the grid of $100$  uniformly spaced values between $100$ and $9900$. For each N we simulate $100$ realizations of the time series, and for each realization we calculate  the $\chi^{2}_{DOF}$. Then we calculate the standard deviation of the 100 values of  $\chi^{2}_{DOF}$ per N. As expected, the standard deviation of $\chi^{2}_{DOF}$ follows the relation  $\chi^{2}_{DOF} \sim \sqrt{2/N}$, as in Eq.~\ref{eq:chi2_variance}}
+\label{fig:time_series_chi2}
+\end{figure}
+
+
+\subsection{What we have so far : how good $\chi^{2}$ can be ? }
+
+In assessing the usefulness of  considering $\chi^{2}$  - like quantities, we found in Sec.~\ref{}  that in order to achieve a $3 \sigma$ detection for a zero-mean harmonic time series  parametrized by $y = A \sin(t) + \epsilon $,  we need $A_{min} = \frac{2.9 \sigma}{N^{1/4}}$ (Eq.~\ref{eq:min_amplitude}).  On Fig.~\ref{} we compare that approach to the fully Bayesian calculation of Sec.~\ref{}, where a quality of detection is described by a signal-to-noise ratio (SN). 
+
+Now if we want to distinguish time series from noise, we may use two other approaches coming from information theory, that quantify the difference in information content between the two models; in our case : noise model , and the time series model.  The two most common definitions of information content used are  Bayesian Information Criterion  (BIC), and Akaike Information Criterion (AIC):
+
+\begin{equation}
+\label{eq:BIC}
+BIC \equiv -2 \ln [L^{0}(M)] + k \ln(N)
+\end{equation}
+
+\begin{equation}
+\label{eq:AIC}
+AIC \equiv -2 \ln[L^{0}(M)] + 2k + \frac{2k(k+1)}{N-k-1}
+\end{equation}
+
+where $L^{0}(M)$ is the maximum value of the data likelihood, $k$ is the number of model parameters, and $N$ is the number of data points. We prove in Appendix A that $-2 \ln[L^{0}(M)] = \chi^{2}_{DOF}$, and thus we can compare $BIC$ and $AIC$ of noise and harmonic models. If we require $\Delta BIC = \Delta AIC = 10$, then we can find (see Appendix A), what is the minimum amplitude that can cause such change in information content, and in this way become distinguishable from noise. 
+
+Therefore, to detect variability in harmonic time series described by $y = A sin(\omega t)$, we can : 
+
+
+
+\begin{enumerate}[label=\alph*)]
+
+	\item require that it's $\chi^{2}_{DOF,series}$ has at least $3\sigma$ departure from pure noise ($\chi^{2}_{DOF,noise} = 1$ ),  so that we have:
+	$\chi^{2}_{DOF,series} =  V / \sigma^{2} = 1 +3 \sqrt{2/N}$, we find:
+	  \begin{equation}
+	      A_{min} /\sigma = 2.9 / N^{1/4}
+	  \end{equation}
+
+	\item require that the $\Delta BIC > 10$, so that:
+	  \begin{equation}
+	      A_{min}/\sigma = \left( \frac{6 \ln {N} + 20 }{N} \right) ^ {1/2}
+	  \end{equation}
+	  
+	\item require that the $\Delta AIC > 10$, so that: 
+	  \begin{equation}
+	      A_{min} / \sigma = \sqrt{32/N}
+	  \end{equation}
+
+\end{enumerate}
+
+
+A comparison between these three complementary ways of assessing the minimum detectable amplitude is shown on Fig.~\ref{fig:chi_BIC_AIC}
+
+\begin{figure}
+ \includegraphics[width=\columnwidth]{figs/Fig_4_min_det_amplitude}
+ \caption{Minimum amplitude required to distinguish a harmonic time series $A sin(\omega t)$  from noise. For $ \log_{10} N > 1.5$ ($N > 30 $) the $BIC$ and $AIC$ criteria allow a detection of smaller $A$ then a $\chi^{2}_{DOF}$-based $3\sigma$ departure.}
+ \label{fig:chi_BIC_AIC}
+\end{figure}
+
+
+
+\subsection{Beyond $\chi^{2}$ : intrinsic variability with Bayesian approach}
+
+As described in  detail in Chapter 5 of Ivezic+2014, it is possible to estimate parameters for  an underlying Gaussian Distribution given the observed data $\{x_{i}\}$. In summary, there are few ways to think about what kind of distribution $\{x_{i}\}$, together with associated errors, may come from. 
+
+First, $\{x_{i}\}$ could be measurements of a constant quantity, eg. length of a ruler, and the sought mean $\mu$ would correspond to our best estimate of the ruler length. If errors are known and heteroscedastic, then we also measure  them individually : $\sigma_{i}$ is a measured quantity, and the likelihood for obtaining data $\{x_{i}\}$ given $\mu$  and $\sigma_{i}$ is :
+\begin{equation}
+p(\{x_{i}\}| \mu, I) = \prod_{i=1}^{N}{\frac{1}{\sqrt{2\pi \sigma_{i}^{2}}} \exp{\left(\frac{-(x_{i}-\mu)^{2}}{2\sigma^{2}_{i}}\right)}}
+\end{equation}
+(eq. 5.47). We thus seek a one-dimensional posterior pdf for $\mu$. 
+
+Second,  if $\{x_{i}\}$ corresponds to measurements of a constant quantity, where measurement errors are negligible compared to the underlying spread $\sigma$ of that quantity, we seek a two-dimensional posterior pdf for $\mu$ and $\sigma$. The likelihood function is a product of Gaussians for each measurement point : 
+
+\begin{equation}
+p(\{x_{i}\}| \mu, \sigma, I) = \prod_{i=1}^{N}{\frac{1}{\sqrt{2\pi \sigma^{2}}} \exp{\left(\frac{-(x_{i}-\mu)^{2}}{2\sigma^{2}}\right)}}
+\end{equation}
+(eq. 5.52)
+
+Finally, if $\{x_{i}\}$  corresponds to measurements of a constant quantity, where measurement errors are known, and non-negligible, but they originate from a Gaussian distribution (width of which for each point is given by $e_{i}$), we seek a two-dimensional posterior pdf for $\mu$ and $\sigma$, where $\sigma$ and $e_{i}$ are coupled. The likelihood function is, as before, a product of Gaussians for each measurement point, but here the intrinsic spread of the measured quantity $\sigma$ is coupled to the width of the error distribution $e_{i}$:
+
+\begin{equation}
+p(\{x_{i}\}| \mu, \sigma, I) = \prod_{i=1}^{N}{\frac{1}{\sqrt{2\pi (\sigma^{2} + e_{i}^{2})}} \exp{\left(\frac{-(x_{i}-\mu)^{2}}{2(\sigma^{2} + e_{i}^{2})}\right)}}
+\end{equation}
+(eq. 5.63)
+
+We consider $\{x_{i}\}$ to be measurements of a brightness of an astrophysical source, with an underlying mean 
+ $\mu$. Given measurement errors $e_{i}$, a detection of nonzero intrinsic $\sigma$ would mean that the object is more variable than what could be explained solely by measurement errors.  It does not explain or describe the nature of variability - whether it is a damped random walk, sinusoid, or some other more complicated periodic or aperiodic behavior. The main question that estimate of $\sigma$ can answer is whether points $\{x_{i}\}$  with errors $e_{i}$ could come from a constant distribution, or are they too spread out for that to be the case.  
+
+
+To test the viability of the method, we simulate a sinusoidal time series, $x(t) = A \sin{(t)}+\mu+e$, sampling at $N=100$ equally spaced points, setting $\mu=1$, $A=1$, $e \sim \mathcal{N}(0,\sigma_{0}=0.1)$(see Fig.~\ref{fig:sinusoidal_time_series}).  Variance of such time series is theoretically $\sigma^{2} = Var(x) = Var(A\sin{(t)})+Var(\mathcal{N}) = A^{2}/2 + \sigma_{0}^{2} $ (as derived in text above Eq.~\ref{eq:variance_sinusoid})
+
+We simulate $N_{sim}= 1000$  of realizations (drawing from random Gaussian noise $\mathcal{N}(0,\sigma_{0}=0.1)$ at each iteration). 
+
+\begin{figure}
+ \includegraphics[width=\columnwidth]{figs/Sinusoidal_time_series}
+ \caption{A simulated time series with $N=100$ evenly spaced in time samples from a process $x(t) = A \sin{(t)} +\mu+n$, where  $\mu=1$, $A=2$, noise is $n \sim \mathcal{N}(0,\sigma_{0}=1)$, and all errors are $e = \sigma_{0}$. Theoretical variance of $x(t)$ is  $Var(x) = A^{2}/2 + \sigma_{0}^{2}$, i.e. here $Var(x) = 3$. }
+ \label{fig:sinusoidal_time_series}
+\end{figure}
+
+One method to distinguish the time series from Gaussian noise is to calculate the $\chi^{2}_{dof} $, which would converge to $\mathcal{N}(1,\sqrt{2/N})$ for a lack of intrinsic variability (see Fig.~\ref{fig:time_series_variance}) . In theory, standard deviation of $\chi^{2}_{dof} $ is $\sqrt{2/N}$,   and Fig.~\ref{fig:chi2_and_SN} illustrates that  we need to set amplitude to as high as 2 to distinguish it from noise.  
+
+For each realization of time series we calculate the full posterior pdf for $\sigma_{0}$ and $\mu$. 
+
+Each pdf is sampled by a grid of 70 points (we call the grid $\mu_{int}$ and $\sigma_{int}$) with minimum set at $min(\sigma_{int} = 0$, and maximum at $ max( max(\sigma_{boot}), \sigma_{st.dev.}(x_{i}) $ , where $max(\sigma_{boot})$ is the maximum of the boostrapped resample of the histogram of $\sigma$ resulting from the approximate method, and $\sigma_{st.dev.}(x_{i})$ is the standard deviation of the input data. 
+
+
+The posterior pdfs $p(\mu_{int})$ and $p(\sigma_{int})$ are shown on Fig.~\ref{fig:time_series_test}, which highlights the differences between the  mean $\bar{\sigma_{int}}$, the value of the pdf at that point $p(\bar{\sigma_{int}})$, the maximum value of $max(p(\sigma_{int}))$, and the theoretical standard deviation  - a square root of variance of the time series:
+
+\begin{equation}
+\bar{\sigma_{int}} = \frac{\sum{p(\sigma_{int})\sigma_{int}}}{\sum{p(\sigma_{int})}}
+\end{equation}
+
+\begin{equation}
+Var(\sigma_{int}) =  \frac{\sum{p(\sigma_{int})\sigma_{int}^{2}}}{\sum{p(\sigma_{int})}} - \bar{\sigma_{int}}^{2}
+\end{equation}
+
+
+
+% star helps it to span two columns... 
+\begin{figure*}
+\includegraphics[width=\textwidth]{figs/Fig_5-8_sin_11_sigma-1_N-100_N_boot-1000}
+\caption{A realization of time series $x(t) = A \sin{(t)}+\mu+\mathcal{N}(0,\sigma_{0})$, with $\mu=1$, $A=1$, $\sigma_{0}=1$. Vertical black dotted line indicates the location of the expected intrinsic standard deviation given by  $stdev(x) = \sqrt{Var(x)} = \sqrt{A^{2}/2}$, so that for $A=1$,  $stdev(x) = \sqrt{0.5} = 0.707$. Vertical green line is  the mean $\bar{\sigma_{int}}$  (Eq.~\ref{eq:expectation_sigma}), and vertical red lines indicate the  standard deviation $\pm 1 \sigma_{\sigma_{int}}$ level, where $\sigma_{\sigma_{int}} = \sqrt{Var(\sigma_{int})}$  (see Eq.~\ref{eq:standard_deviation_sigma}). The horizontal red line is the value of the posterior pdf at the mean : $p(\bar{\sigma_{int}})$, whereas the horizontal blue line is the maximum value of $p(\sigma_{int})$. We use the mean : $\bar{\sigma_{int}}$ , to define signal , and  the standard deviation : $\sigma_{\sigma_{int}}$ to define noise.  Thus $S/N =  \bar{\sigma_{int}} / \sigma_{\sigma_{int}}$}
+\label{fig:time_series_test}
+\end{figure*}
+
+
+We can quantify the accuracy of our estimate of the intrinsic variability ($\sigma_{0}$) by describing the shape of the resulting posterior pdf $p(\sigma)$. 
+
+Therefore, for each lightcurve for which we calculate $p(\sigma)$, we also calculate : 
+\begin{itemize}
+\item the expectation value of $\sigma$ (i.e. mean):  
+	\begin{equation}
+	\label{eq:expectation_sigma}
+	\langle \sigma_{int} \rangle= \frac{\sum \sigma_{int} p(\sigma_{int})}{\sum p(\sigma_{int})} 
+	\end{equation}
+
+\item standard deviation of $\sigma$, $st.dev.(\sigma)$, found from the square root of Variance (see Appendix B) : 
+	\begin{equation}
+	\label{eq:standard_deviation_sigma}
+	st.dev.(\sigma)=\left(\frac{\sum \sigma_{int}^{2}p(\sigma_{int}) } {\sum p(\sigma_{int})} - \langle \sigma_{int} \rangle^{2} \right) ^{1/2}
+	\end{equation}
+
+\item weighted median($\sigma$)  (the weighted 50-th percentile)
+
+\item the robust interquartile range assuming Gaussian origin: $\sigma_{G} = 0.741 * (percentile(75)  - percentile(25))$ using weighted percentiles 
+
+\item assuming $p(\sigma)$ normalized : the probability for $\sigma$ to lie between  $\langle \sigma \rangle \pm 2 \, st.dev(\sigma)$. This allows to asses the Gaussianity of the pdf, by comparison to such probability for a pure Gaussian, which is $p(Gauss) = 0.95449973610364158$ .  
+
+For $m = |\sigma - \langle \sigma \rangle| < 2 st.dev(\sigma)$,  
+\begin{equation}
+p(2 \, st.dev(\sigma)) = \sum{p(\sigma[m]) \Delta \sigma}
+\end{equation}
+where 
+
+$\Delta \sigma = \sigma[1] - \sigma[0]$, i.e. the grid spacing. If $p(2 \, st.dev) > p(Gauss)$ then we consider the pdf to be Gaussian.  
+\end{itemize}
+
+
+Calculating the weighted interquartile range is non-trivial : indeed it is not readily implemented in available software packages. Traditionally, given an array V, a q-th percentile of V is the value q/100 of the way from minimum to maximum of the sorted array V.  Fig.~\ref{fig:iqr_data} shows an example of a weighted dataset, and Fig.~\ref{fig:iqr_plot}  illustrates steps taken in finding a weighted percentile, required to find $\sigma_{G}$ and  median($\sigma$) above.  
+
+
+\begin{figure}
+\includegraphics[width=\columnwidth]{figs/01_25_IQR_illustrate_dataset}
+\caption{A dataset used to illustrate calculation of the weighted interquartile range (see Fig.~\ref{fig:iqr_plot}). We plot data and the corresponding weights.  A real example could correspond for instance to the pdf $p(\sigma)$ considered in this section, where data is $\sigma$, and weights are $p(\sigma)$, so that calculating weighted median or weighted percentile (for $\sigma_{G}$) for $\sigma$ amounts to a problem of finding a weighted percen}  
+\label{fig:iqr_data}
+\end{figure}
+
+\begin{figure}
+ \includegraphics[width=\columnwidth]{figs/01_25_IQR_illustrate}
+ \caption{An illustration of calculating the weighted percentile. This can be used to calculate eg. the median, which is the 50-th percentile , or the Gaussian robust width (interquartile range $\sigma$). According to SciPy percentile specification,  "Given a vector V, a q-th percentile of V is the value q/100 of the way from minimum to maximum of the sorted array V". For the data with weights , we need to find the percentile considering the data together with associated weights - if some datapoint had much more weight than others, then the percentile would be preferentially skewed towards that point. Classically, for integer weights one could simply replicate the given datapoints as many times as weights would indicate:   for  d = [1,2,3], and w=[3,2,4], we could say that it is equivalent to d = [1,1,1,2,2,3,3,3,3].  However ,this  approach fails with non-integer weights. Our method allows for non-integer weights. Consider a short list of data with weights, shown on Fig.~\ref{fig:iqr_data} , d = [  2,   5,   1,   7,    3],   w = [0.1, 0.2, 0.3, 0.1, 0.05],  we sort them into tuples according to the data : [($d_{i},w_{i}$)] = [(1, 0.3), (2, 0.1), (3, 0.05), (5, 0.2), (7, 0.1)],  so that weights $w_{i}$ are sorted acccording to the data values $d_{i}$.  Then we calculate the cumulative sum of sorted weights, and find which $w_{i}$  are below the fracpoint. Fracpoint  $f$, a generalization of midpoint,  is a fraction of the total sum of the weights corresponding to the $q$-th percentile:  $f = (q / 100) \sum{w_{i}}$. For $q=50$, $f = 0.5 * (0.1 + 0.2 + 0.3 +  0.1 +  0.05) = 0.625$. This is marked by the horizontal red dashed line. The last point in the cumulative sum smaller than $f$ is marked by the orange diamond, while the next point in cumulative sum is marked by the green diamond.  If $f$ is close to the orange diamond, then the $q$-th percentile becomes the datapoint corresponding to the mean distance between the two diamond points.}
+ \label{fig:iqr_plot}
+\end{figure}
+
+
+
+
+Using the mean and variance of $\sigma$ we can define the signal-to-noise (S/N) ratio, taking  $S= \bar{\sigma}$ and the noise as $N = \sqrt{Var(\sigma)}$. We thus $\chi^{2}_{dof}$ and $S/N$ are shown on Fig.~\ref{fig:chi2_and_SN} for a sampling of amplitudes between $0.01$ and $1.0$.  
+
+\begin{figure}
+ \includegraphics[width=1.1\columnwidth]{figs/Fig_1_chi_SN_histograms}
+ \caption{For the time series $x(t) = A \sin{(t)}+\mu+\mathcal{N}(0,\sigma_{0})$, shown on Fig.~\ref{fig:sinusoidal_time_series}, we assume $\sigma_{0}=1.0$, $\mu=1$, and errors $e_{i} = \sigma_{0}$ and sample 100 values of amplitude $A$ evenly spaced between $A=0.01$ (blue) and $1.0$ (red). On the left panel the thick dashed black curve corresponds to a Gaussian  with a mean $1$, width $\sqrt{(2/N) = 0.141}$  ($\mathcal{N}(1,0.141)$). The right panel shows how the $S/N$ of the posterior intrinsic $\sigma$ distribution increases as we increase the amplitude of variability. Importantly, the  $S/N$ of $p(\sigma)$ increases more rapidly than the $\chi^{2}_{DOF}$, showing that using the Bayesian method is quicker to show signs of variability for small amplitudes. }
+ \label{fig:chi2_and_SN}
+\end{figure}
+
+Given amplitude $A$, fixing $\sigma_{0} =1.0$,  for each histogram of $N_{sim}$ realizations of $x(t,A)$   we calculate the completeness as a  fraction of detections above a given $S/N$ threshold. Thus sampling over $A$ we compute completeness curves $S/N > 3$, and $S/N > 5$, shown on Fig.~\ref{fig:completeness_curve}
+
+
+\begin{figure}
+  \includegraphics[width=\columnwidth]{figs/Fig_2_Completeness_curve}
+  \caption{Completeness curves for $S/N > 3$ or $S/N > 5$, as shown by violet and red curves, respectively. We simulate time series $x(t) = A \sin{(t)}+\mu+\mathcal{N}(0,\sigma_{0})$, iterating 1000 times over each amplitude. For each iteration we calculate $\chi^{2}_{DOF}$ and $S/N$, thus there are 1000 values of each per amplitude (see Fig.~\ref{fig:chi2_and_SN}  for the histograms).  Assume that all values of $S/N$ for a given $A$ is stored as a 1000-element array of $S/N$. For each value of $A$, completeness corresponds to the fraction of $S/N$ that is bigger than the chosen  $S/N_{cut}$ (either 3 or 5). This corresponds to the ratio of the area of the histogram of $S/N$ values  above  $S/N_{cut}$  to that below. Thus, for a given $A$,  $f(S/N_{cut}) = (count(S/N > S/N_{cut})) / 1000$. Practically, this implies that if we require $S/N > 3$, we reach $90\%$ completeness level at the $A/\sigma$ level of 0.2}
+  \label{fig:completeness_curve}
+\end{figure}
+
+
+
+
+
+
+\begin{figure}
+  \includegraphics[width=\columnwidth]{figs/Fig_3_chi_SN_scatter}
+  \caption{Collapsing information from Fig.~\ref{fig:chi2_and_SN} onto one plot, color represents number density. The standard deviation for $\chi^{2}$ distribution is $\sigma = \sqrt{(2/N)}$. For $N=100$, $\sigma = 0.14$, so that $1+3 \sigma = 1.42$, and $1+5\sigma=1.70$.  Horizontal lines mark 3 and 5 $\sigma$ limits. For each value of amplitude A we make 1000 realizations of time series with N=100 points.  For each realization, we calculate the AstroML 5.8 $\sigma$, as well as properties of the PDF : $p(\sigma)$, that yields $S/N$ for each time series.  We also calculate for each realization the value of $\chi^{2}_{DOF}$ against the hypothesis of no variability (model y=1 ) . The aim is to compare how does $\chi^{2}_{DOF}$ compare to $S/N$ in selecting variable objects for a given (input) amplitude. Since for each A we have 1000 realizations of time series, we can plot the histogram of $\chi^{2}_{DOF}$ or $S/N$ , which is done in figure above. }
+  \label{fig:chi_sn_scatter}
+\end{figure}
+
+
+
+With two sources of variance, $\chi^{2}_{dof} $ method is the  most popular , but it heavily underperforms. In method of AstroML 5.8 we assume Gaussian origin of variations, but the type of variations is not known a-priori as we observe a random object. So whether we assume Gaussian origin, or sinusoidal (like for Lomb-Scargle), in the worst case we are equally wrong. 
+
+We test the performance of AstroML 5.8 method against Lomb-Scargle 10.14. 
+
+\section{Frequency Domain Methods}
+
+\subsection{Periodograms}
+
+
+\subsection{Choosing the frequency grid}
+The choice of frequency grid can vastly affect our ability to detect the signal in the noisy, undersampled data. 
+We could calculate either power either in angular frequency grid $\omega$ [radians], or the ordinary frequency $f = \omega / 2  \pi$ [1 / seconds] . 
+We consider three different approaches to the problem.  
+The smallest frequency that we can detect in a regularly sampled time series may correspond to largest time interval (the baseline) $\Delta T = t_{max} - t_{min}$, so that $f_{min} = 1 / T$. This is adopted by AstroML and EBellm, but Astropy reaches to frequencies $2 S$ times smaller, where $S$, termed as the number of samples across a typical peak, is set to $5$ by default. Thus :
+
+\begin{equation}
+f_{min}^{AstroML} = f_{min}^{EBellm} = 2 S f_{min}^{AstroPy} = \frac{1}{\Delta T}
+\end{equation} 
+
+The maximum frequency depends on the shortest time interval between data.  For evenly sampled data,  where $\Delta t$ is equal to the time interval between data points, the maximum detectable frequency would be $f_{max} = 1 / \Delta t$, also called Nyquist frequency. 
+For the more realistic case of unevenly sampled data (as in our illustration, see Fig.~\ref{fig:frequency_grids}) AstroML and EBellm use a pseudo-Nyquist frequency of $f_{max} = 1 / (2 median(\Delta t))$, where $\Delta t $ is the time difference between consecutive observations (see Ivezic+2014,  Debosscher+2007, Eyer\&Bartholdi 1999). Another approach, used in AstroPy, is to make the maximum frequency dependant on the number of points, so that $f_{max} = f_{min} + (N y_{F}) / (2 \Delta T)$, where $N$ is the number of data points, and $y_{F}$ is the  multiple of the average Nyquist frequency: 
+
+\begin{equation}
+f_{max}^{AstroML} = f_{max}^{EBellm} = \frac{1}{median(\Delta T)}
+\end{equation}
+
+\begin{equation}
+\frac{f_{max}^{AstroML}}{f_{max}^{AstroPy}} = \frac{S \Delta T }{median(\Delta t) (1 + S y_{F} N)}
+\end{equation}
+
+
+The density of frequency grid should depend on the cadence and time span of the data. With unlimited computational resources, one would use the highest possible number of gridpoints.   However, realistically we are limited by computational time, and thus we aim to use as little grid points as possible to robustly detect the peak freqyency.  Debosscher+2007 chose to express the frequency step as a fraction $\eta$ of the smallest detectable frequency: $\Delta f_{1} = \eta f_{min}$ (in their treatment, $\eta = 0.1$). The frequency step should not be larger than the standard deviation of the location of the peak : $\Delta f_{1} < \sigma_{f}$, for otherwise the main periodogram peak may be missed by a too coarse frequency grid.  
+Choosing the frequency step, is in other words choosing the number of frequency bins in a linearly spaced grid.
+This can be a proportional to $n$ times the minimum frequency fits in the frequency span:  $N = n (f_{max} - f_{min}) / f_{min}$. We can see that $n = 1 / \eta$, so that the first choice of $\Delta f$ is equivalent to $N_{1} = (f_{max} - f_{min}) / \Delta f_{1} = 10 (f_{max} - f_{min}) / f_{min}$ bins. E. Bellm (priv. comm.) chose $n=5$ (iPTF Summer School 2016 hands-on exercises), whereas Ivezic+2014, following Debosscher+2007, chose $n=10$.  In other words, using expressions above for $f_{min}$ and $f_{max}$ we arrive at following explicit formulations: 
+
+\begin{equation}
+N_{bins}^{AstroML} = 2 * N_{bins}^{EBellm} = \frac{5 \Delta T }{median(\Delta t)} - 10 
+\end{equation}
+
+In AstroPy the number of bins is set as proportional to the number of datapoints: 
+
+\begin{equation}
+N_{bins}^{AstroPy} = 0.5 S y_{F} N 
+\end{equation}
+
+Thus all approaches, regardless of how grid spacing, start and end points are defined, result in a linearly spaced grid :  $f_{grid} = linear \, space(f_{min}, f_{max}, N)$. 
+
+
+
+\begin{figure*}
+  \includegraphics[width=\textwidth]{figs/12-03-16_compare_frequency_grids_theory}
+  \caption{We simulate time series with $N$ observation times randomly chosen between $0$ and $100$,  varying $N$ from $10$ to $150$ in intervals of $10$. As we explain in the text, the left panel shows that AstroPy chooses higher number of gridpoints for the same $N$ than AstroML or EBellm.  The middle  and right panels show that while $f_{min}$ and $f_{max}$ are identical for  AstroML and EBellm implementations,  they are more extreme for AstroPy (bigger $f_{max}$, smaller $f_{min}$). For all $N$ the length of baseline $\Delta T$ is unchanged, i.e. we sample more points from the same time interval. Note that we plot $\omega = 2 \pi f $. }
+  \label{fig:frequency_grids}
+\end{figure*}
+
+
+\begin{figure*}
+  \includegraphics[width=\textwidth]{figs/12-03-16_compare_frequency_grids_baselines}
+  \caption{We simulate time series with fixed $N=100$ observations, sampled at times randomly chosen from between $0$ and baseline $\Delta T$, varying $\Delta T $ from $100$ to $1500$ in intervals of $100$.  On the left panel, we see that the number of bins for $AstroPy$ remains constant, since it is proportional to $0.5 S y_{F} N$, while  for AstroPy and EBellm the number of bins is approximately constant, because as $\Delta T$ increases, so does $median(\Delta t)$, with fixed $N=100$. For this reason, in the middle panel for AstroML and EBellm, $f_{max} \propto 1 / median(\Delta t) \propto 1 / \Delta T $. The right panel shows $f_{min}$ decreasing with an increase of baseline as $1/ \Delta T$ for AstroML and EBellm, and as $1 / (10 \Delta T)$ for AstroPy.}
+  \label{fig:frequency_grids_baselines}
+\end{figure*}
+
+
+
+\section{Summary}
+
+\appendix
+\section{Proof of AIC and BIC }
+
+We prove that both $BIC$ and $AIC$ are related to $\chi^{2}_{DOF}$, and that for a harmonic time series the difference between model and noise information criteria is a function of amplitude, number of points, and measurement error : 
+
+\begin{equation}
+{\Delta BIC, \Delta AIC}(\mathrm{model} - \mathrm{noise}) = f(A, N, \sigma)
+\end{equation}
+
+Let us start from a definition of Bayesian Information Criterion. Given model M, 
+
+\begin{equation}
+\label{eq:BIC_eq}
+BIC \equiv -2 \ln [L^{0}(M)] + k \ln(N)
+\end{equation}
+
+
+where $L^{0}(M)$ is the maximum value of the data likelihood, $k$ is the number of model parameters, and $N$ is the number of data points.  We aim to compare the BIC between the harmonic model and the pure noise model.  First,  note for a combined likelihood $\mathcal{L}$ for any set of measurements ${y_{1},y_{2},...,y_{N}}$, we can often assume that each value of $y_{i}$ is sampled with a Gaussian likelihood:
+
+\begin{multline}
+\mathcal{L}(y_{1},y_{2},...,y_{N}) = \mathcal{L}(y_{1})  \mathcal{L}(y_{2})  ... \mathcal{L}(y_{N})  \\ 
+=   \prod{\mathcal{L}(y_{i})} = 
+\prod_{i=1}^{N}{\frac{1}{\sqrt{2\pi \sigma_{i}}} \exp{-\frac{\left( y_{i} - \bar{y_{i}} \right)^{2} }{2 \sigma_{i}^{2}}  }  }
+\end{multline}
+
+
+
+Now, we replace the mean values $\bar{y_{i}}$  with the theoretically 
+'expected' values $y_{i,exp}$  and we assume that measurement errors are homoscedastic, so that $\sigma_{i} = \sigma$ : 
+
+\begin{multline}
+\mathcal{L} = \prod_{i=1}^{N}{\frac{1}{\sqrt{2\pi \sigma_{i}}} \exp{-\frac{\left( y_{i} - \bar{y_{i,exp}} \right)^{2} }{2 \sigma_{i}^{2}}  }  } \\
+= \frac{1}{\sqrt{2 \pi \sigma^{2N}}}  \exp{ \left\{ \sum_{i=1}^{N}{-\frac{\left( y_{i} - \bar{y_{i,exp}} \right)^{2} }  {2 \sigma_{i}^{2}}  }  \right\} }
+\end{multline}
+
+Now we rename part of the sum : 
+
+\begin{equation}
+\sum_{i=1}^{N}{-\frac{\left( y_{i} - \bar{y_{i,exp}} \right)^{2} }  { \sigma_{i}^{2}}  } \equiv \chi^{2} 
+\end{equation}
+
+
+
+so that : 
+
+\begin{equation}
+\mathcal{L}  = \frac{1}{\sqrt{2 \pi \sigma^{2N}}} e^{- \chi^{2} / 2 }
+\end{equation}
+
+Thus if we drop normalization coefficients, we find that the log-likelihood can be expressed with $\chi^2$ : 
+
+\begin{equation}
+\ln \mathcal{L}^{0}(M) \propto \ln e^{- \chi^{2} / 2 } = - \chi^{2} / 2
+\end{equation}
+
+\begin{equation}
+BIC = -\chi^{2} + k \ln {N}
+\end{equation}
+
+
+Now the advantage of choosing harmonic model over noise is : 
+
+%https://www.sharelatex.com/learn/Aligning_equations_with_amsmath
+\begin{equation}
+	\begin{split}
+	\Delta BIC & = BIC(harmonic) - BIC(noise) \\
+	           & = - \chi^{2}_{\omega} + k_{\omega} \ln {N} - (- \chi^{2}_{0} + k_{0} \ln {N}) \\
+	           & = \chi^{2}_{0} - \chi^{2}_{\omega} - (k_{0} - k_{\omega}) \ln {N}
+	\end{split}
+\end{equation}
+(Eq. 10.54 in \citep{ivezic2014})
+
+
+Now we show how $\chi^{2}$ can be linked for a harmonic model to the Lomb-Scargle Periodogram. 
+For a harmonic model, $y(t_{j}) = a \sin(\omega t) + b \cos(\omega t)$. Thus : 
+
+\begin{equation} 
+	\begin{alignedat}{2}
+	\therefore \chi^{2}_{\omega} &= \frac{1}{\sigma^{2}} &&\displaystyle\sum_{j=1}^{N}{\left( y_{j} - a_{0} \sin(\omega t_{j}) - b_{0} \cos(\omega t_{j]})\right)^{2}}  \frac{1}{\sigma^{2}}  \\
+	&= \sum_{j=1}^{N} \left(\right. &&y_{j}^{2} - 2 a_{0}y_{j}\sin - 2 b_{0} y_{j}\cos \\
+	& &&+2 a_{0}b_{0}\sin \cos + a_{0}^{2}\sin^{2} + b_{0}^{2}\cos^{2}  \left. \right) 
+	\end{alignedat}
+\end{equation}
+
+We can rewrite this expression in terms of $V = \sum y_{j}^{2}$, $I = $
+
+
+
+\begin{equation}
+\label{eq:AIC_eq}
+AIC \equiv -2 \ln[L^{0}(M)] + 2k + \frac{2k(k+1)}{N-k-1}
+\end{equation}
+
+
+\section{Weighted Mean and Standard Deviation}
+
+
+
+Here we consider the difference between calculating unweighted and weighted versions of mean and standard deviation. For instance, consider a set of points $x_{i}$ with errors $e_{i}$ . If we assume that each point $x_{i}$ has an equal probability, so that we are calculating unweighted mean and standard deviation. Then the  mean is  :
+\begin{equation}
+\label{eq:unweighted_mean}
+\mu(x_{i}) = \frac{\sum x_{i}}{N}
+\end{equation}
+
+and the standard deviation : 
+
+\begin{equation}
+\label{eq:unweighted_deviation}
+\sigma(x_{i}) = \sqrt{\frac{1}{N} \sum{(x_{i} - \mu)^{2}}}
+\end{equation}
+where if the mean $\mu$ is calculated based on the data, we loose one degree of freedom, so that $1/N$ becomes $1/(N-1)$. This is called Bessel's correction, but for large N does not significantly change the result.  
+
+Now, if instead of having equal probabilities each point $x_{i}$ has a probability $p_{i}$ (often called weight $w_{i}$), then the mean is  called weighted mean : 
+
+\begin{equation}
+\label{eq:weighted_mean}
+\mu_{w}(x_{i}) = \frac{\sum p_{i} x_{i}}{\sum p_{i}}
+\end{equation}
+where we divided by the sum of probabilities to ensure that they are normalized. If they are properly normalized, then $\sum p_{i} = 1$. If all values are equally likely, then $p_{i} = 1$, so that $\sum_{i=0}^{N}(p_{i}) = N$, and we recover Eq.~\ref{eq:unweighted_mean}.
+
+Similarly, for standard deviation we have 
+\begin{equation}
+\label{eq:weighted_deviation}
+\sigma_{w}(x_{i}) = \sqrt{ \frac{\sum{p_{i}(x_{i} - \mu_{w})^{2}}}{\sum p_{i}} }
+\end{equation}
+
+
+where we divide by the sum of probabilities (weights), to ensure that the probability is normalized (especially if we are using weights). Note, that here again if all weights (probabilities) are equally likely (but not necessarily normalized), then $p_{i} = 1$, and $\sum p_{i}= N$, and we recover Eq.~\ref{eq:unweighted_deviation}. Thus, for all weights equal, $\sigma_{w} = \sigma$, and $\mu_{w} = \mu$, as we would expect. 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%% REFERENCES %%%%%%%%%%%%%%%%%%
+
+% The best way to enter references is to use BibTeX:
+
+\bibliographystyle{mnras}
+\bibliography{references} % if your bibtex file is called example.bib
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% Don't change these lines
+\bsp	% typesetting comment
+\label{lastpage}
+\end{document}
+
+% End of mnras_template.tex
+
