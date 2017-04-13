@@ -67,7 +67,7 @@
 % If you need two or more lines of authors, add an extra line using \newauthor
 \author[K. Suberlak et al.]{
 Krzysztof Suberlak,$^{1}$\thanks{E-mail: suberlak@uw.edu}
-\v{Z}eljko Ivezi\'c, $^{1}$
+\v{Z}eljko Ivezi\'c$^{1}$
 \\
 % List of institutions
 $^{1}$Department of Astronomy, University of Washington, Seattle, WA, United States\\
@@ -435,7 +435,7 @@ Using the mean and variance of $\sigma$ we can define the signal-to-noise (S/N) 
 
 \begin{figure}
  \includegraphics[width=1.1\columnwidth]{figs/Fig_1_chi_SN_histograms}
- \caption{For the time series $x(t) = A \sin{(t)}+\mu+\mathcal{N}(0,\sigma_{0})$, shown on Fig.~\ref{fig:sinusoidal_time_series}, we assume $\sigma_{0}=1.0$, $\mu=1$, and errors $e_{i} = \sigma_{0}$ and sample 100 values of amplitude $A$ evenly spaced between $A=0.01$ (blue) and $1.0$ (red). On the left panel the thick dashed black curve corresponds to a Gaussian  with a mean $1$, width $\sqrt{(2/N) = 0.141}$  ($\mathcal{N}(1,0.141)$). The right panel shows how the $S/N$ of the posterior intrinsic $\sigma$ distribution increases as we increase the amplitude of variability. Importantly, the  $S/N$ of $p(\sigma)$ increases more rapidly than the $\chi^{2}_{DOF}$, showing that using the Bayesian method is quicker to show signs of variability for small amplitudes. }
+ \caption{For the time series $x(t) = A \sin{(t)}+\mu+\mathcal{N}(0,\sigma_{0})$, shown on Fig.~\ref{fig:sinusoidal_time_series}, we assume $\sigma_{0}=1.0$, $\mu=1$, and errors $e_{i} = \sigma_{0}$ and sample 200 values of amplitude $A$ evenly spaced between $A=0.01$ (blue) and $2.0$ (red). We use 1000 boostraps in calculating $p(\sigma)$. We perform  1000 simulations (realizations of time series) per the value of Amplitude. Thus per value of A we have 1000 realizations of the time series, and we calculate $\chi^{2}$ per amplitude.  On the left panel the thick dashed black curve corresponds to a Gaussian  with a mean $1$, width $\sqrt{(2/N) = 0.141}$  ($\mathcal{N}(1,0.141)$). The right panel shows how the $S/N$ of the posterior intrinsic $\sigma$ distribution increases as we increase the amplitude of variability. Importantly, the  $S/N$ of $p(\sigma)$ increases more rapidly than the $\chi^{2}_{DOF}$, showing that using the Bayesian method is quicker to show signs of variability for small amplitudes.}
  \label{fig:chi2_and_SN}
 \end{figure}
 
