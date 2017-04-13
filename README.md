@@ -9,7 +9,7 @@ In particular :
 
 Research    |   Notebook 
 ------------|------------
-Chi2 variance simulation  | Variability_chi2_test_AstroML 
+Chi2 variance simulation  | [Variability_chi2_test_AstroML](https://github.com/suberlak/SDSS_S82_FP_research/blob/master/code/Variability_chi2_test_AstroML.ipynb) 
 Weighted interquartile range, used in calculating the mean sigma | [Variability_weighted_interquartile_range](https://github.com/suberlak/SDSS_S82_FP_research/blob/master/code/Variability_weighted_interquartile_range.ipynb)
 What quantities are calculated for p(sigma) | [Variability_descriptors_of_p_sigma](https://github.com/suberlak/SDSS_S82_FP_research/blob/master/code/Variability_descriptors_of_p_sigma.ipynb)
 Chi2 tests, completeness curve | [Variability_time_completeness_curve](https://github.com/suberlak/SDSS_S82_FP_research/blob/master/code/Variability_time_completeness_curve.ipynb)
