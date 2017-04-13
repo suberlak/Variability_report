@@ -431,7 +431,7 @@ Calculating the weighted interquartile range is non-trivial : indeed it is not r
 
 
 
-Using the mean and variance of $\sigma$ we can define the signal-to-noise (S/N) ratio, taking  $S= \bar{\sigma}$ and the noise as $N = \sqrt{Var(\sigma)}$. We thus $\chi^{2}_{dof}$ and $S/N$ are shown on Fig.~\ref{fig:chi2_and_SN} for a sampling of amplitudes between $0.01$ and $1.0$.  
+Using the mean and variance of $\sigma$ we can define the signal-to-noise (S/N) ratio, taking  $S= \hat{\sigma}$ and the noise as $N = \sqrt{Var(\sigma)}$. We thus $\chi^{2}_{dof}$ and $S/N$ are shown on Fig.~\ref{fig:chi2_and_SN} for a sampling of 200 amplitudes between $0.01$ and $2.0$.  
 
 \begin{figure}
  \includegraphics[width=1.1\columnwidth]{figs/Fig_1_chi_SN_histograms}
@@ -451,13 +451,44 @@ Given amplitude $A$, fixing $\sigma_{0} =1.0$,  for each histogram of $N_{sim}$ 
 
 
 
-
-
 \begin{figure}
   \includegraphics[width=\columnwidth]{figs/Fig_3_chi_SN_scatter}
   \caption{Collapsing information from Fig.~\ref{fig:chi2_and_SN} onto one plot, color represents number density. The standard deviation for $\chi^{2}$ distribution is $\sigma = \sqrt{(2/N)}$. For $N=100$, $\sigma = 0.14$, so that $1+3 \sigma = 1.42$, and $1+5\sigma=1.70$.  Horizontal lines mark 3 and 5 $\sigma$ limits. For each value of amplitude A we make 1000 realizations of time series with N=100 points.  For each realization, we calculate the AstroML 5.8 $\sigma$, as well as properties of the PDF : $p(\sigma)$, that yields $S/N$ for each time series.  We also calculate for each realization the value of $\chi^{2}_{DOF}$ against the hypothesis of no variability (model y=1 ) . The aim is to compare how does $\chi^{2}_{DOF}$ compare to $S/N$ in selecting variable objects for a given (input) amplitude. Since for each A we have 1000 realizations of time series, we can plot the histogram of $\chi^{2}_{DOF}$ or $S/N$ , which is done in figure above. }
   \label{fig:chi_sn_scatter}
 \end{figure}
+
+As a sanity check, we  plot on scatter plots  $\chi^{2}$ vs. A (Fig.~\ref{fig:A_vs_chi2}) ,  S/N  vs A (Fig.~\ref{fig:A_vs_SN}),  and $\hat \sigma$ vs. A (Fig.~\ref{fig:A_vs_sigma}). Since the plot would have very narrow  horizontal 'strips' with only one value of A per 1000 values of either of $\chi^{2}$, S/N, or $\hat \sigma$, we add a small offset to A, so that $A_{1} = A + \mathcal{N}(0,0.005)$
+
+\begin{figure}
+ \includegraphics[width=\columnwidth]{figs/Fig_4_A_vs_chi2dof}
+  \caption{A sanity check :  representing the same information as the left panel of Fig.~\ref{fig:chi2_and_SN} as a heatmap.}
+\label{fig:A_vs_chi2}
+\end{figure}
+
+
+\begin{figure}
+ \includegraphics[width=\columnwidth]{figs/Fig_4_A_vs_SN}
+  \caption{A sanity check: representing the same information as the right panel of Fig.~\ref{fig:chi2_and_SN} as a heatmap.}
+\label{fig:A_vs_SN}
+\end{figure}
+
+
+\begin{figure}
+ \includegraphics[width=\columnwidth]{figs/Fig_4_A_vs_mean_sigma}
+  \caption{A sanity check: S/N values are calculated as the ratio of the  mean $\sigma$   ($\hat \sigma$), to the standard deviation of the likelihood $p(\sigma)$. We see that above A $\approx$ 1 the Bayesian AstroML method of detecting intrinsic variability becomes sensitive to the input amplitude of the harmonic time series ( $x(t) = A \sin{(t)}+\mu+\mathcal{N}(0,\sigma_{0})$, with unit mean : $\mu = 1$, and input intrinsic variability : $\sigma_{0} = 1.0 $, evaluated over $t \in (0,2 \pi)$, sampled by $N=100$ points).}
+\label{fig:A_vs_sigma}
+\end{figure}
+
+
+We also perform null test to verify the way in which the AstroML Bayesian method responds to pure error.  We simulate 1000 times time series  $x(t) = A \sin{(t)}+1+\mathcal{N}(0,\sigma_{0})$, with  null amplitude : $A =0$, and Gaussian noise sampled from a distribution centered on 0 with width  of  $\sigma_{0} = 1$. We assume homoscedastic errors,  where $e_{i} =\sigma_{0} $ for each point. We show on Fig.~\ref{fig:null_test}  normalized cumulative sums for the same quantities as what is shown on previous figures. 
+
+
+\begin{figure*}
+ \includegraphics[width=\textwidth]{figs/Fig_null_test_cumsum}
+  \caption{A sanity check: setting A=0, we  perform  1000 realizations of harmonic time series with Gaussian unit noise  (as Figs.~\ref{fig:chi2_and_SN},\ref{fig:completeness_curve},\ref{fig:chi_sn_scatter},\ref{fig:A_vs_chi2},\ref{fig:A_vs_SN},\ref{fig:A_vs_sigma}). From left to right,panels show cumulative sums of $\chi^{2}_{DOF}$, S/N ratio ( = $\hat \sigma$ / $st.dev.[p(\sigma)]$  per iteration), the mean $\sigma$  ($\hat \sigma$), $\sigma(L^{0})$ : $\sigma$ at the 2-D maximum of the full log-likelihood. [more info : why do these plots make sense ? ]}
+\label{fig:null_test}
+\end{figure*}
+
 
 
 
