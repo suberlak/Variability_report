@@ -10,13 +10,13 @@ In particular :
 Research    |   Notebook 
 ------------|------------
 Chi2 variance simulation  | Variability_chi2_test_AstroML 
-Weighted interquartile range, used in calculating the mean sigma | Variability_weighted_interquartile_range 
-What quantities are calculated for p(sigma) | Variability_descriptors_of_p_sigma 
-Chi2 tests, completeness curve | Variability_time_completeness_curve
-Benchmarking AstroML 5.8 code: how number of bootstraps, number of points affect speed of execution | Variability_timeit_AstroML
-Frequency : investigating gridding choice | Variability_frequency_grid
-Frequency : choosing the best grid | Variability_frequency_grid_solution
-Simulating the estimate of periodogram peak height from AstroML eq. 10.49 | Variability_frequency_AstroML_chap-10 
-Comparing BIC to AIC in the periodogram context : AstroML Fig.10.15 | Variability_compare_BIC_vs_AIC_AstroML_Fig10-15 
+Weighted interquartile range, used in calculating the mean sigma | [Variability_weighted_interquartile_range](https://github.com/suberlak/SDSS_S82_FP_research/blob/master/code/Variability_weighted_interquartile_range.ipynb)
+What quantities are calculated for p(sigma) | [Variability_descriptors_of_p_sigma](https://github.com/suberlak/SDSS_S82_FP_research/blob/master/code/Variability_descriptors_of_p_sigma.ipynb)
+Chi2 tests, completeness curve | [Variability_time_completeness_curve](https://github.com/suberlak/SDSS_S82_FP_research/blob/master/code/Variability_time_completeness_curve.ipynb)
+Benchmarking AstroML 5.8 code: how number of bootstraps, number of points affect speed of execution | [Variability_timeit_AstroML](https://github.com/suberlak/SDSS_S82_FP_research/blob/master/code/Variability_timeit_AstroML.ipynb)
+Frequency : investigating gridding choice | [Variability_frequency_grid](https://github.com/suberlak/SDSS_S82_FP_research/blob/master/code/Variability_frequency_grid.ipynb)
+Frequency : choosing the best grid | [Variability_frequency_grid_solution](https://github.com/suberlak/SDSS_S82_FP_research/blob/master/code/Variability_frequency_grid_solution.ipynb)
+Simulating the estimate of periodogram peak height from AstroML eq. 10.49 | [Variability_frequency_AstroML_chap-10](https://github.com/suberlak/SDSS_S82_FP_research/blob/master/code/Variability_frequency_AstroML_chap-10.ipynb)
+Comparing BIC to AIC in the periodogram context : AstroML Fig.10.15 | [Variability_compare_BIC_vs_AIC_AstroML_Fig10-15](https://github.com/suberlak/SDSS_S82_FP_research/blob/master/code/Variability_compare_BIC_vs_AIC_AstroML_Fig10-15.ipynb)
 
 
